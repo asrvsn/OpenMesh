@@ -41,6 +41,62 @@ py::list infolist(Module& _self) {
 }
 
 template <class Mesh>
+void copy_locked_vertex_prop(Mesh& _mesh, const std::string& _name) {
+	if (!_mesh.template py_has_property<OM::VertexHandle>(_name)) {
+		const std::string msg = "Vertex property \"" + _name + "\" does not exist.";
+		PyErr_SetString(PyExc_RuntimeError, msg.c_str());
+		throw py::error_already_set();
+	}
+	for (auto vh : _mesh.vertices()) {
+		const auto val = _mesh.template py_property<OM::VertexHandle, typename Mesh::VPropHandle>(_name, vh);
+		// BaseDecimaterT ctor requests vertex status
+		_mesh.status(vh).set_locked(py::cast<bool>(val));
+	}
+}
+
+template <class Mesh>
+void copy_feature_vertex_prop(Mesh& _mesh, const std::string& _name) {
+	if (!_mesh.template py_has_property<OM::VertexHandle>(_name)) {
+		const std::string msg = "Vertex property \"" + _name + "\" does not exist.";
+		PyErr_SetString(PyExc_RuntimeError, msg.c_str());
+		throw py::error_already_set();
+	}
+	for (auto vh : _mesh.vertices()) {
+		const auto val = _mesh.template py_property<OM::VertexHandle, typename Mesh::VPropHandle>(_name, vh);
+		// BaseDecimaterT ctor requests vertex status
+		_mesh.status(vh).set_feature(py::cast<bool>(val));
+	}
+}
+
+template <class Mesh>
+void copy_feature_edge_prop(Mesh& _mesh, const std::string& _name) {
+	if (!_mesh.template py_has_property<OM::EdgeHandle>(_name)) {
+		const std::string msg = "Edge property \"" + _name + "\" does not exist.";
+		PyErr_SetString(PyExc_RuntimeError, msg.c_str());
+		throw py::error_already_set();
+	}
+	for (auto eh : _mesh.edges()) {
+		const auto val = _mesh.template py_property<OM::EdgeHandle, typename Mesh::EPropHandle>(_name, eh);
+		// BaseDecimaterT ctor requests edge status
+		_mesh.status(eh).set_feature(py::cast<bool>(val));
+	}
+}
+
+template <class Mesh>
+void copy_status_props(Mesh& _mesh,
+                       py::object _locked_vertex_propname,
+                       py::object _feature_vertex_propname,
+                       py::object _feature_edge_propname)
+{
+	if (!_locked_vertex_propname.is_none())
+		copy_locked_vertex_prop(_mesh, py::cast<std::string>(_locked_vertex_propname));
+	if (!_feature_vertex_propname.is_none())
+		copy_feature_vertex_prop(_mesh, py::cast<std::string>(_feature_vertex_propname));
+	if (!_feature_edge_propname.is_none())
+		copy_feature_edge_prop(_mesh, py::cast<std::string>(_feature_edge_propname));
+}
+
+template <class Mesh>
 void expose_decimater(py::module& m, const char *_name) {
 
 	typedef OM::Decimater::ModBaseT<Mesh> ModBase;
@@ -64,11 +120,8 @@ void expose_decimater(py::module& m, const char *_name) {
 	typedef OM::Decimater::ModHandleT<ModQuadric> ModQuadricHandle;
 	typedef OM::Decimater::ModHandleT<ModRoundness> ModRoundnessHandle;
 
-	typedef OM::Decimater::BaseDecimaterT<Mesh> BaseDecimater;
 	typedef OM::Decimater::DecimaterT<Mesh> Decimater;
-
 	typedef typename ModProgMesh::Info Info;
-	typedef std::vector<Info> InfoList;
 
 	// Decimater
 	// ----------------------------------------
@@ -78,10 +131,53 @@ void expose_decimater(py::module& m, const char *_name) {
 
 	py::class_<Decimater>(m, buffer)
 		.def(py::init<Mesh&>(), py::keep_alive<1,2>())
-		.def("decimate", &Decimater::decimate, py::arg("n_collapses")=0)
-		.def("decimate_to", &Decimater::decimate_to)
-		.def("decimate_to_faces", &Decimater::decimate_to_faces,
-			py::arg("n_vertices")=0, py::arg("n_faces")=0)
+
+		.def("decimate", [](Decimater& _self,
+		                    size_t _n_collapses,
+		                    py::object _locked_vertex_propname,
+		                    py::object _feature_vertex_propname,
+		                    py::object _feature_edge_propname)
+			{
+				copy_status_props(_self.mesh(), _locked_vertex_propname,
+				                  _feature_vertex_propname, _feature_edge_propname);
+				_self.decimate(_n_collapses);
+			},
+			py::arg("n_collapses")=0,
+			py::arg("locked_vertex_propname")=py::none(),
+			py::arg("feature_vertex_propname")=py::none(),
+			py::arg("feature_edge_propname")=py::none())
+
+		.def("decimate_to", [](Decimater& _self,
+		                       size_t _n_vertices,
+		                       py::object _locked_vertex_propname,
+		                       py::object _feature_vertex_propname,
+		                       py::object _feature_edge_propname)
+			{
+				copy_status_props(_self.mesh(), _locked_vertex_propname,
+				                  _feature_vertex_propname, _feature_edge_propname);
+				_self.decimate_to(_n_vertices);
+			},
+			py::arg("n_vertices"),
+			py::arg("locked_vertex_propname")=py::none(),
+			py::arg("feature_vertex_propname")=py::none(),
+			py::arg("feature_edge_propname")=py::none())
+
+		.def("decimate_to_faces", [](Decimater& _self,
+		                             size_t _n_vertices,
+		                             size_t _n_faces,
+		                             py::object _locked_vertex_propname,
+		                             py::object _feature_vertex_propname,
+		                             py::object _feature_edge_propname)
+			{
+				copy_status_props(_self.mesh(), _locked_vertex_propname,
+				                  _feature_vertex_propname, _feature_edge_propname);
+				_self.decimate_to_faces(_n_vertices, _n_faces);
+			},
+			py::arg("n_vertices")=0,
+			py::arg("n_faces")=0,
+			py::arg("locked_vertex_propname")=py::none(),
+			py::arg("feature_vertex_propname")=py::none(),
+			py::arg("feature_edge_propname")=py::none())
 
 		.def("initialize", [](Decimater& _self) { return _self.initialize(); })
 		.def("is_initialized", [](Decimater& _self) { return _self.is_initialized(); })
