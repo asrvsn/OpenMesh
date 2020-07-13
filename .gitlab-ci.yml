@@ -49,6 +49,7 @@ build-3.5-macos:
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv --clear -p python3.5 .
+    - ls -la *
     - source bin/activate
     - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
@@ -80,6 +81,7 @@ build-2.7-macos:
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv --clear -p python2.7 .
+    - ls -la *
     - source bin/activate
     - python setup.py bdist_wheel --dist-dir dist2
   artifacts:
