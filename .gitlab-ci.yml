@@ -16,7 +16,9 @@ build-3.7-VS2017:
     - git submodule sync --recursive
     - git submodule update --init --recursive
   script:
+    - echo %PATH%
     - set PATH "C:\Program Files\Python37;C:\Program Files\Python37\Scripts;C:\Program Files\CMake\bin;%PATH%"
+    - echo %PATH%
     - virtualenv -p "C:\Program Files\Python37\python.exe" .
     - call .\Scripts\activate
     - python setup.py bdist_wheel --dist-dir dist3
