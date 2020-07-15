@@ -17,7 +17,7 @@ build-3.7-VS2017:
     - git submodule update --init --recursive
   script:
     - set PATH="C:\Program Files\Python37;C:\Program Files\Python37\Scripts;C:\Program Files\CMake\bin;%PATH%"
-    - virtualenv.exe -p "C:\Program Files\Python37\python.exe" .
+    - virtualenv -p "C:\Program Files\Python37\python.exe" .
     - call .\Scripts\activate
     - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
@@ -98,7 +98,7 @@ test-3.7-VS2017:
     - build-3.7-VS2017
   script:
     - set PATH="C:\Program Files\Python37;C:\Program Files\Python37\Scripts;%PATH%"
-    - virtualenv.exe -p "C:\Program Files\Python37\python.exe" .
+    - virtualenv -p "C:\Program Files\Python37\python.exe" .
     - call .\Scripts\activate
     - cd dist3
     - FOR %%a IN (*.whl) DO pip install %%a
