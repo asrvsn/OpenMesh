@@ -160,10 +160,7 @@ deploy-3.7-VS2017:
     - python37
   dependencies:
     - build-3.7-VS2017
-  script:
-    - mkdir release
-    - cd dist3
-    - FOR %a IN (*.whl) DO copy %a ..\release
+  script: "CI\\deploy-3.7-VS2017.bat"
   artifacts:
     paths:
       - release/*.whl
