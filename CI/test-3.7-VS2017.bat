@@ -1,4 +1,4 @@
-set PATH="C:\Program Files\Python37;C:\Program Files\Python37\Scripts;%PATH%"
+set PATH=C:\Program Files\Python37;C:\Program Files\Python37\Scripts;%PATH%
 virtualenv -p "C:\Program Files\Python37\python.exe" .
 call .\Scripts\activate
 cd dist3
