@@ -417,10 +417,12 @@ void expose_type_specific_functions(py::class_<PolyMesh>& _class) {
 
 	typedef py::array_t<typename Point::value_type> np_point_t;
 
-	OM::FaceHandle (PolyMesh::*add_face_4_vh)(OM::VertexHandle, OM::VertexHandle, OM::VertexHandle, OM::VertexHandle) = &PolyMesh::add_face;
-
 	_class
-		.def("add_face", add_face_4_vh)
+		/*
+		.def("add_face", [](PolyMesh& _self, OM::VertexHandle _vh0, OM::VertexHandle _vh1, OM::VertexHandle _vh2, OM::VertexHandle _vh3) {
+				 return static_cast<OM::FaceHandle>(_self.add_face(_vh0, _vh1, _vh2, _vh3));
+			})
+			*/
 
 		.def("split", [](PolyMesh& _self, OM::EdgeHandle _eh, np_point_t _arr) {
 				_self.split(_eh, Point(_arr.at(0), _arr.at(1), _arr.at(2)));
@@ -546,7 +548,6 @@ void expose_mesh(py::module& m, const char *_name) {
 	void (Mesh::*set_halfedge_handle_fh_hh)(OM::FaceHandle,   OM::HalfedgeHandle) = &Mesh::set_halfedge_handle;
 
 	// Low-level adding new items
-	OM::VertexHandle (Mesh::*new_vertex_void )(void                        ) = &Mesh::new_vertex;
 	OM::FaceHandle   (Mesh::*new_face_void   )(void                        ) = &Mesh::new_face;
 	OM::FaceHandle   (Mesh::*new_face_face   )(const typename Mesh::Face&  ) = &Mesh::new_face;
 
@@ -578,10 +579,6 @@ void expose_mesh(py::module& m, const char *_name) {
 	// Assign connectivity
 	void (*assign_connectivity_poly)(Mesh&, const PolyMesh&) = &assign_connectivity;
 	void (*assign_connectivity_tri )(Mesh&, const TriMesh& ) = &assign_connectivity;
-
-	// Adding items to a mesh
-	OM::FaceHandle (Mesh::*add_face_3_vh)(OM::VertexHandle, OM::VertexHandle, OM::VertexHandle) = &Mesh::add_face;
-	OM::FaceHandle (Mesh::*add_face_list)(const std::vector<OM::VertexHandle>&) = &Mesh::add_face;
 
 	// Vertex and face valence
 	unsigned int (Mesh::*valence_vh)(OM::VertexHandle) const = &Mesh::valence;
@@ -691,12 +688,22 @@ void expose_mesh(py::module& m, const char *_name) {
 		.def("set_vertex_handle", &Mesh::set_vertex_handle)
 		.def("face_handle", face_handle_hh)
 		.def("set_face_handle", &Mesh::set_face_handle)
-		.def("next_halfedge_handle", &Mesh::next_halfedge_handle)
-		.def("set_next_halfedge_handle", &Mesh::set_next_halfedge_handle)
+		.def("next_halfedge_handle", [](Mesh& _self, OM::HalfedgeHandle heh) {
+				 return static_cast<OM::HalfedgeHandle>(_self.next_halfedge_handle(heh));
+			})
+		.def("set_next_halfedge_handle", [](Mesh& _self, OM::HalfedgeHandle heh0, OM::HalfedgeHandle heh1) {
+				 _self.set_next_halfedge_handle(heh0, heh1);
+			})
 		.def("prev_halfedge_handle", prev_halfedge_handle_hh)
-		.def("opposite_halfedge_handle", &Mesh::opposite_halfedge_handle)
-		.def("ccw_rotated_halfedge_handle", &Mesh::ccw_rotated_halfedge_handle)
-		.def("cw_rotated_halfedge_handle", &Mesh::cw_rotated_halfedge_handle)
+		.def("opposite_halfedge_handle", [](Mesh& _self, OM::HalfedgeHandle heh) {
+				 return static_cast<OM::HalfedgeHandle>(_self.opposite_halfedge_handle(heh));
+			})
+		.def("ccw_rotated_halfedge_handle", [](Mesh& _self, OM::HalfedgeHandle heh) {
+				 return static_cast<OM::HalfedgeHandle>(_self.ccw_rotated_halfedge_handle(heh));
+			})
+		.def("cw_rotated_halfedge_handle", [](Mesh& _self, OM::HalfedgeHandle heh) {
+				 return static_cast<OM::HalfedgeHandle>(_self.cw_rotated_halfedge_handle(heh));
+			})
 		.def("edge_handle", edge_handle_hh)
 
 		.def("halfedge_handle", halfedge_handle_eh_uint)
@@ -789,9 +796,11 @@ void expose_mesh(py::module& m, const char *_name) {
 		.def("has_face_colors", &Mesh::has_face_colors)
 		.def("has_face_texture_index", &Mesh::has_face_texture_index)
 
-		.def("new_vertex", new_vertex_void)
+		.def("new_vertex", [](Mesh& _self) {
+				 return static_cast<OM::VertexHandle>(_self.new_vertex());
+			})
 		.def("new_vertex", [](Mesh& _self, py::array_t<typename Point::value_type> _arr) {
-				return _self.new_vertex(Point(_arr.at(0), _arr.at(1), _arr.at(2)));
+				return static_cast<OM::VertexHandle>(_self.new_vertex(Point(_arr.at(0), _arr.at(1), _arr.at(2))));
 			})
 
 		.def("new_edge", &Mesh::new_edge)
@@ -870,8 +879,12 @@ void expose_mesh(py::module& m, const char *_name) {
 		.def("assign_connectivity", assign_connectivity_poly)
 		.def("assign_connectivity", assign_connectivity_tri)
 
-		.def("add_face", add_face_3_vh)
-		.def("add_face", add_face_list)
+		.def("add_face", [](Mesh& _self, OM::VertexHandle _vh0, OM::VertexHandle _vh1, OM::VertexHandle _vh2) {
+				 return static_cast<OM::FaceHandle>(_self.add_face(_vh0, _vh1, _vh2));
+			})
+		.def("add_face", [](Mesh& _self, const std::vector<OM::VertexHandle>& _vhs) {
+				 return static_cast<OM::FaceHandle>(_self.add_face(_vhs));
+			})
 
 		.def("opposite_face_handle", &Mesh::opposite_face_handle)
 		.def("adjust_outgoing_halfedge", &Mesh::adjust_outgoing_halfedge)
