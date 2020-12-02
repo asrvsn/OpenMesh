@@ -418,11 +418,9 @@ void expose_type_specific_functions(py::class_<PolyMesh>& _class) {
 	typedef py::array_t<typename Point::value_type> np_point_t;
 
 	_class
-		/*
 		.def("add_face", [](PolyMesh& _self, OM::VertexHandle _vh0, OM::VertexHandle _vh1, OM::VertexHandle _vh2, OM::VertexHandle _vh3) {
 				 return static_cast<OM::FaceHandle>(_self.add_face(_vh0, _vh1, _vh2, _vh3));
 			})
-			*/
 
 		.def("split", [](PolyMesh& _self, OM::EdgeHandle _eh, np_point_t _arr) {
 				_self.split(_eh, Point(_arr.at(0), _arr.at(1), _arr.at(2)));
@@ -917,7 +915,7 @@ void expose_mesh(py::module& m, const char *_name) {
 			})
 
 		.def("add_vertex", [](Mesh& _self, py::array_t<typename Point::value_type> _arr) {
-				return _self.add_vertex(Point(_arr.at(0), _arr.at(1), _arr.at(2)));
+				return static_cast<OM::VertexHandle>(_self.add_vertex(Point(_arr.at(0), _arr.at(1), _arr.at(2))));
 			})
 
 		.def("delete_vertex", [](Mesh& _self, OM::VertexHandle _vh, bool _delete_isolated) {
