@@ -13,6 +13,8 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <iostream>
+#include <typeinfo>
 
 namespace py = pybind11;
 
@@ -38,13 +40,13 @@ template <class Mesh>
 class MeshWrapperT : public Mesh {
 public:
 
-	typedef OpenMesh::VPropHandleT<py::none> VPropHandle;
-	typedef OpenMesh::HPropHandleT<py::none> HPropHandle;
-	typedef OpenMesh::EPropHandleT<py::none> EPropHandle;
-	typedef OpenMesh::FPropHandleT<py::none> FPropHandle;
+	typedef OpenMesh::VPropHandleT<py::object> VPropHandle;
+	typedef OpenMesh::HPropHandleT<py::object> HPropHandle;
+	typedef OpenMesh::EPropHandleT<py::object> EPropHandle;
+	typedef OpenMesh::FPropHandleT<py::object> FPropHandle;
 
 	template <class Handle, class PropHandle>
-	py::none py_property(const std::string& _name, Handle _h) {
+	py::object py_property(const std::string& _name, Handle _h) {
 		const auto prop = py_prop_on_demand<Handle, PropHandle>(_name);
 		return Mesh::property(prop, _h);
 	}
@@ -238,6 +240,10 @@ private:
 			PropHandle prop;
 			Mesh::add_property(prop, _name);
 			prop_map[_name] = prop;
+			const size_t n = py_n_items(Handle());
+			for (size_t i = 0; i < n; ++i) {
+				Mesh::property(prop, Handle(i)) = py::none();
+			}
 		}
 		return prop_map.at(_name);
 	}
