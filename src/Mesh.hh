@@ -886,7 +886,9 @@ void expose_mesh(py::module& m, const char *_name) {
 
 		.def("opposite_face_handle", &Mesh::opposite_face_handle)
 		.def("adjust_outgoing_halfedge", &Mesh::adjust_outgoing_halfedge)
-		.def("find_halfedge", &Mesh::find_halfedge)
+		.def("find_halfedge", [](Mesh& _self, OM::VertexHandle _vh0, OM::VertexHandle _vh1) {
+				 return static_cast<OM::HalfedgeHandle>(_self.find_halfedge(_vh0, _vh1));
+			})
 		.def("valence", valence_vh)
 		.def("valence", valence_fh)
 		.def("is_simple_link", &Mesh::is_simple_link)
