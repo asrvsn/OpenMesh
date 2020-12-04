@@ -1,3 +1,2 @@
 mkdir release
-cd dist3
-FOR %%a IN (*.whl) DO copy %%a ..\release
+copy dist3\*.whl release\ /Y
