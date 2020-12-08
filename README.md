@@ -1,4 +1,4 @@
-# OpenMesh Python Bindings
+# OpenMesh Python Bindings (1.1.6)
 
 [![](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/badges/master/pipeline.svg)](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/commits/master)
 
