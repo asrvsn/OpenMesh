@@ -893,13 +893,21 @@ void expose_mesh(py::module& m, const char *_name) {
 		.def("valence", valence_fh)
 		.def("is_simple_link", &Mesh::is_simple_link)
 		.def("is_simply_connected", &Mesh::is_simply_connected)
-		.def("remove_edge", &Mesh::remove_edge)
-		.def("reinsert_edge", &Mesh::reinsert_edge)
 		.def("triangulate", triangulate_fh)
 		.def("triangulate", triangulate_void)
 		.def("split_edge", &Mesh::split_edge)
 		.def("split_edge_copy", &Mesh::split_edge_copy)
 
+		.def("remove_edge", [](Mesh& _self, OM::EdgeHandle _eh) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				if (!_self.has_face_status()) _self.request_face_status();
+				return _self.remove_edge(_eh);
+			})
+		.def("reinsert_edge", [](Mesh& _self, OM::EdgeHandle _eh) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				if (!_self.has_face_status()) _self.request_face_status();
+				_self.reinsert_edge(_eh);
+			})
 		.def("is_collapse_ok", [](Mesh& _self, OM::HalfedgeHandle _heh) {
 				if (!_self.has_vertex_status()) _self.request_vertex_status();
 				if (!_self.has_halfedge_status()) _self.request_halfedge_status();
