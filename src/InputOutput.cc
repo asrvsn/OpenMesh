@@ -24,7 +24,11 @@ void def_read_mesh(py::module& m, const char *_name) {
 			bool _face_color,
 			bool _face_texture_index,
 			bool _color_alpha,
-			bool _color_float
+			bool _color_float,
+			bool _vertex_status,
+			bool _halfedge_status,
+			bool _edge_status,
+			bool _face_status
 		)
 		{
 			Mesh mesh;
@@ -69,6 +73,24 @@ void def_read_mesh(py::module& m, const char *_name) {
 			}
 			if (_face_texture_index) {
 				mesh.request_face_texture_index();
+			}
+			if (_vertex_status) {
+				mesh.request_vertex_status();
+			}
+			if (_edge_status) {
+				mesh.request_vertex_status();
+			}
+			if (_halfedge_status) {
+				mesh.request_halfedge_status();
+			}
+			if (_edge_status) {
+				mesh.request_edge_status();
+			}
+			if (_face_status) {
+				mesh.request_face_status();
+			}
+			if (_face_status || _halfedge_status || _edge_status || _face_status) {
+				options += OM::IO::Options::Status;
 			}
 
 			if (_color_alpha) options += OM::IO::Options::ColorAlpha;
@@ -126,7 +148,11 @@ void def_read_mesh(py::module& m, const char *_name) {
 		py::arg("face_color")=false,
 		py::arg("face_texture_index")=false,
 		py::arg("color_alpha")=false,
-		py::arg("color_float")=false
+		py::arg("color_float")=false,
+		py::arg("vertex_status")=false,
+		py::arg("halfedge_status")=false,
+		py::arg("edge_status")=false,
+		py::arg("face_status")=false
 	);
 }
 
@@ -148,7 +174,8 @@ void def_write_mesh(py::module& m) {
 			bool _face_normal,
 			bool _face_color,
 			bool _color_alpha,
-			bool _color_float
+			bool _color_float,
+			bool _status
 		)
 		{
 			OM::IO::Options options;
@@ -168,6 +195,8 @@ void def_write_mesh(py::module& m) {
 
 			if (_color_alpha) options += OM::IO::Options::ColorAlpha;
 			if (_color_float) options += OM::IO::Options::ColorFloat;
+
+			if (_status) options += OM::IO::Options::Status;
 
 			const bool ok = OM::IO::write_mesh(_mesh, _filename, options);
 
@@ -191,7 +220,8 @@ void def_write_mesh(py::module& m) {
 		py::arg("face_normal")=false,
 		py::arg("face_color")=false,
 		py::arg("color_alpha")=false,
-		py::arg("color_float")=false
+		py::arg("color_float")=false,
+		py::arg("status")=false
 	);
 }
 
