@@ -3,24 +3,24 @@ stages:
   - test
   - deploy
 
-build-3.7-VS2017:
+build-3.9-VS2017:
   stage:
     build
   tags:
     - VS2017
-    - python37
+    - Python39
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE: "x64"
   before_script:
     - git submodule sync --recursive
     - git submodule update --init --recursive
-  script: "CI\\build-3.7-VS2017.bat"
+  script: "CI\\build-3.9-VS2017.bat"
   artifacts:
     paths:
       - dist3/
-
-build-3.7-linux:
+      
+build-3.9-linux:
   stage:
     build
   tags:
@@ -28,12 +28,12 @@ build-3.7-linux:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
     paths:
-      - dist3/
+      - dist3/      
 
 build-3.5-macos:
   stage:
@@ -50,21 +50,22 @@ build-3.5-macos:
   artifacts:
     paths:
       - dist3/
-
-build-2.7-linux:
+      
+build-3.9-macos-m1:
   stage:
     build
   tags:
-    - Linux
+    - AppleM1
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python2.7 .
+    - export PATH=/opt/local/bin:$PATH
+    - virtualenv -p python3.9 .
     - source bin/activate
-    - python setup.py bdist_wheel --dist-dir dist2
+    - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
     paths:
-      - dist2/
+      - dist3/
 
 build-2.7-macos:
   stage:
@@ -82,29 +83,32 @@ build-2.7-macos:
     paths:
       - dist2/
 
-test-3.7-VS2017:
+test-3.9-VS2017:
   stage:
     test
   tags:
     - VS2017
-    - python37
+    - Python39
   dependencies:
-    - build-3.7-VS2017
-  script: "CI\\test-3.7-VS2017.bat"
+    - build-3.9-VS2017
+  needs: [build-3.9-VS2017]
+  script: "CI\\test-3.9-VS2017.bat"
 
-test-3.7-linux:
+    
+test-3.9-linux:
   stage:
     test
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - pip install dist3/*.whl
     - cd tests
-    - python -m unittest discover
+    - python -m unittest discover    
 
 test-3.5-macos:
   stage:
@@ -113,6 +117,7 @@ test-3.5-macos:
     - Apple
   dependencies:
     - build-3.5-macos
+  needs: [build-3.5-macos]
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv -p python3.5 .
@@ -121,20 +126,22 @@ test-3.5-macos:
     - cd tests
     - python -m unittest discover
 
-test-2.7-linux:
+test-3.9-macos-m1:
   stage:
     test
   tags:
-    - Linux
+    - AppleM1
   dependencies:
-    - build-2.7-linux
+    - build-3.9-macos-m1
+  needs: [build-3.9-macos-m1]
   script:
-    - virtualenv -p python2.7 .
+    - export PATH=/opt/local/bin:$PATH
+    - virtualenv -p python3.9 .
     - source bin/activate
-    - pip install dist2/*.whl
+    - pip install dist3/*.whl
     - cd tests
-    - python -m unittest discover
-
+    - python -m unittest discover    
+    
 test-2.7-macos:
   stage:
     test
@@ -142,6 +149,7 @@ test-2.7-macos:
     - Apple
   dependencies:
     - build-2.7-macos
+  needs: [build-2.7-macos]
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv -p python2.7 .
@@ -150,32 +158,34 @@ test-2.7-macos:
     - cd tests
     - python -m unittest discover
 
-deploy-3.7-VS2017:
+deploy-3.9-VS2017:
   stage:
     deploy
   tags:
     - VS2017
-    - python37
+    - Python39
   dependencies:
-    - build-3.7-VS2017
-  script: "CI\\deploy-3.7-VS2017.bat"
+    - build-3.9-VS2017
+  needs: [build-3.9-VS2017]
+  script: "CI\\deploy-3.9-VS2017.bat"
   artifacts:
     paths:
       - release/*.whl
-
-deploy-3.7-linux:
+     
+deploy-3.9-linux:
   stage:
     deploy
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
     - mkdir release
     - cp dist3/*.whl release
   artifacts:
     paths:
-      - release/*.whl
+      - release/*.whl      
 
 deploy-3.5-macos:
   stage:
@@ -184,26 +194,28 @@ deploy-3.5-macos:
     - Apple
   dependencies:
     - build-3.5-macos
+  needs: [build-3.5-macos]
   script:
     - mkdir release
     - cp dist3/*.whl release
   artifacts:
     paths:
       - release/*.whl
-
-deploy-2.7-linux:
+      
+deploy-3.9-macos-m1:
   stage:
     deploy
   tags:
-    - Linux
+    - AppleM1
   dependencies:
-    - build-2.7-linux
+    - build-3.9-macos-m1
+  needs: [build-3.9-macos-m1]
   script:
     - mkdir release
-    - cp dist2/*.whl release
+    - cp dist3/*.whl release
   artifacts:
     paths:
-      - release/*.whl
+      - release/*.whl      
 
 deploy-2.7-macos:
   stage:
@@ -212,6 +224,7 @@ deploy-2.7-macos:
     - Apple
   dependencies:
     - build-2.7-macos
+  needs: [build-2.7-macos]
   script:
     - mkdir release
     - cp dist2/*.whl release
@@ -227,7 +240,7 @@ deploy-sdist:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - python setup.py sdist --dist-dir release
   artifacts:
@@ -240,9 +253,10 @@ deploy-documentation:
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - pip install dist3/*.whl
     - pip install sphinx sphinx_rtd_theme
