@@ -91,6 +91,7 @@ test-3.9-VS2017:
     - Python39
   dependencies:
     - build-3.9-VS2017
+  needs: [build-3.9-VS2017]
   script: "CI\\test-3.9-VS2017.bat"
 
     
@@ -101,6 +102,7 @@ test-3.9-linux:
     - Linux
   dependencies:
     - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
     - virtualenv -p python3.9 .
     - source bin/activate
@@ -115,6 +117,7 @@ test-3.5-macos:
     - Apple
   dependencies:
     - build-3.5-macos
+  needs: [build-3.5-macos]
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv -p python3.5 .
@@ -130,6 +133,7 @@ test-3.9-macos-m1:
     - AppleM1
   dependencies:
     - build-3.9-macos-m1
+  needs: [build-3.9-macos-m1]
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv -p python3.9 .
@@ -145,6 +149,7 @@ test-2.7-macos:
     - Apple
   dependencies:
     - build-2.7-macos
+  needs: [build-2.7-macos]
   script:
     - export PATH=/opt/local/bin:$PATH
     - virtualenv -p python2.7 .
@@ -161,6 +166,7 @@ deploy-3.9-VS2017:
     - Python39
   dependencies:
     - build-3.9-VS2017
+  needs: [build-3.9-VS2017]
   script: "CI\\deploy-3.9-VS2017.bat"
   artifacts:
     paths:
@@ -173,6 +179,7 @@ deploy-3.9-linux:
     - Linux
   dependencies:
     - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
     - mkdir release
     - cp dist3/*.whl release
@@ -187,6 +194,7 @@ deploy-3.5-macos:
     - Apple
   dependencies:
     - build-3.5-macos
+  needs: [build-3.5-macos]
   script:
     - mkdir release
     - cp dist3/*.whl release
@@ -201,6 +209,7 @@ deploy-3.9-macos-m1:
     - AppleM1
   dependencies:
     - build-3.9-macos-m1
+  needs: [build-3.9-macos-m1]
   script:
     - mkdir release
     - cp dist3/*.whl release
@@ -215,6 +224,7 @@ deploy-2.7-macos:
     - Apple
   dependencies:
     - build-2.7-macos
+  needs: [build-2.7-macos]
   script:
     - mkdir release
     - cp dist2/*.whl release
@@ -244,6 +254,7 @@ deploy-documentation:
     - Linux
   dependencies:
     - build-3.9-linux
+  needs: [build-3.9-linux]
   script:
     - virtualenv -p python3.9 .
     - source bin/activate
