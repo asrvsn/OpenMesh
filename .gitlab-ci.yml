@@ -3,19 +3,19 @@ stages:
   - test
   - deploy
 
-build-3.7-VS2017:
+build-3.9-VS2017:
   stage:
     build
   tags:
     - VS2017
-    - python37
+    - python39
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE: "x64"
   before_script:
     - git submodule sync --recursive
     - git submodule update --init --recursive
-  script: "CI\\build-3.7-VS2017.bat"
+  script: "CI\\build-3.9-VS2017.bat"
   artifacts:
     paths:
       - dist3/
@@ -83,15 +83,15 @@ build-2.7-macos:
     paths:
       - dist2/
 
-test-3.7-VS2017:
+test-3.9-VS2017:
   stage:
     test
   tags:
     - VS2017
-    - python37
+    - python39
   dependencies:
-    - build-3.7-VS2017
-  script: "CI\\test-3.7-VS2017.bat"
+    - build-3.9-VS2017
+  script: "CI\\test-3.9-VS2017.bat"
 
     
 test-3.9-linux:
@@ -153,15 +153,15 @@ test-2.7-macos:
     - cd tests
     - python -m unittest discover
 
-deploy-3.7-VS2017:
+deploy-3.9-VS2017:
   stage:
     deploy
   tags:
     - VS2017
-    - python37
+    - python39
   dependencies:
-    - build-3.7-VS2017
-  script: "CI\\deploy-3.7-VS2017.bat"
+    - build-3.9-VS2017
+  script: "CI\\deploy-3.9-VS2017.bat"
   artifacts:
     paths:
       - release/*.whl
