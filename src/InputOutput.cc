@@ -148,7 +148,9 @@ void def_write_mesh(py::module& m) {
 			bool _face_normal,
 			bool _face_color,
 			bool _color_alpha,
-			bool _color_float
+			bool _color_float,
+			const std::string& _texture_file = "",
+			const std::string& _material_file_extension = ".mat"
 		)
 		{
 			OM::IO::Options options;
@@ -168,6 +170,8 @@ void def_write_mesh(py::module& m) {
 
 			if (_color_alpha) options += OM::IO::Options::ColorAlpha;
 			if (_color_float) options += OM::IO::Options::ColorFloat;
+			options.texture_file = _texture_file;
+			options.material_file_extension = _material_file_extension;
 
 			const bool ok = OM::IO::write_mesh(_mesh, _filename, options);
 
@@ -191,7 +195,9 @@ void def_write_mesh(py::module& m) {
 		py::arg("face_normal")=false,
 		py::arg("face_color")=false,
 		py::arg("color_alpha")=false,
-		py::arg("color_float")=false
+		py::arg("color_float")=false,
+		py::arg("texture_file")="",
+		py::arg("material_file_extension")=".mat"
 	);
 }
 

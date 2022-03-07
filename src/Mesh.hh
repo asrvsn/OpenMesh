@@ -719,10 +719,21 @@ void expose_mesh(py::module& m, const char *_name) {
 				_self.status(_h).set_deleted(_val);
 			})
 
-		.def("is_deleted", [](Mesh& _self, OM::HalfedgeHandle _h) {
-				if (!_self.has_halfedge_status()) return false;
-				return _self.status(_h).deleted();
-			})
+        .def("is_locked", [](Mesh& _self, OM::VertexHandle _h) {
+            if (!_self.has_vertex_status()) return false;
+            return _self.status(_h).locked();
+        })
+
+        .def("set_locked", [](Mesh& _self, OM::VertexHandle _h, bool _val) {
+            if (!_self.has_vertex_status()) _self.request_vertex_status();
+            _self.status(_h).set_locked(_val);
+
+        })
+
+        .def("is_deleted", [](Mesh& _self, OM::HalfedgeHandle _h) {
+            if (!_self.has_halfedge_status()) return false;
+            return _self.status(_h).deleted();
+        })
 
 		.def("set_deleted", [](Mesh& _self, OM::HalfedgeHandle _h, bool _val) {
 				if (!_self.has_halfedge_status()) _self.request_halfedge_status();
