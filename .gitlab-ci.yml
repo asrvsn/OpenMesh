@@ -67,22 +67,6 @@ build-3.9-macos-m1:
     paths:
       - dist3/
 
-build-2.7-macos:
-  stage:
-    build
-  tags:
-    - Apple
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
-  script:
-    - export PATH=/opt/local/bin:$PATH
-    - virtualenv -p python2.7 .
-    - source bin/activate
-    - python setup.py bdist_wheel --dist-dir dist2
-  artifacts:
-    paths:
-      - dist2/
-
 test-3.9-VS2017:
   stage:
     test
@@ -141,22 +125,6 @@ test-3.9-macos-m1:
     - pip install dist3/*.whl
     - cd tests
     - python -m unittest discover    
-    
-test-2.7-macos:
-  stage:
-    test
-  tags:
-    - Apple
-  dependencies:
-    - build-2.7-macos
-  needs: [build-2.7-macos]
-  script:
-    - export PATH=/opt/local/bin:$PATH
-    - virtualenv -p python2.7 .
-    - source bin/activate
-    - pip install dist2/*.whl
-    - cd tests
-    - python -m unittest discover
 
 deploy-3.9-VS2017:
   stage:
@@ -216,21 +184,6 @@ deploy-3.9-macos-m1:
   artifacts:
     paths:
       - release/*.whl      
-
-deploy-2.7-macos:
-  stage:
-    deploy
-  tags:
-    - Apple
-  dependencies:
-    - build-2.7-macos
-  needs: [build-2.7-macos]
-  script:
-    - mkdir release
-    - cp dist2/*.whl release
-  artifacts:
-    paths:
-      - release/*.whl
 
 deploy-sdist:
   stage:
