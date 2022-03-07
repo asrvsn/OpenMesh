@@ -8,7 +8,7 @@ build-3.9-VS2017:
     build
   tags:
     - VS2017
-    - python39
+    - Python39
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE: "x64"
@@ -88,7 +88,7 @@ test-3.9-VS2017:
     test
   tags:
     - VS2017
-    - python39
+    - Python39
   dependencies:
     - build-3.9-VS2017
   script: "CI\\test-3.9-VS2017.bat"
@@ -158,7 +158,7 @@ deploy-3.9-VS2017:
     deploy
   tags:
     - VS2017
-    - python39
+    - Python39
   dependencies:
     - build-3.9-VS2017
   script: "CI\\deploy-3.9-VS2017.bat"
