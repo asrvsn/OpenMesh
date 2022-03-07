@@ -19,8 +19,8 @@ build-3.7-VS2017:
   artifacts:
     paths:
       - dist3/
-
-build-3.7-linux:
+      
+build-3.9-linux:
   stage:
     build
   tags:
@@ -28,12 +28,12 @@ build-3.7-linux:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
     paths:
-      - dist3/
+      - dist3/      
 
 build-3.5-macos:
   stage:
@@ -50,21 +50,6 @@ build-3.5-macos:
   artifacts:
     paths:
       - dist3/
-
-build-2.7-linux:
-  stage:
-    build
-  tags:
-    - Linux
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
-  script:
-    - virtualenv -p python2.7 .
-    - source bin/activate
-    - python setup.py bdist_wheel --dist-dir dist2
-  artifacts:
-    paths:
-      - dist2/
 
 build-2.7-macos:
   stage:
@@ -92,19 +77,20 @@ test-3.7-VS2017:
     - build-3.7-VS2017
   script: "CI\\test-3.7-VS2017.bat"
 
-test-3.7-linux:
+    
+test-3.9-linux:
   stage:
     test
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - pip install dist3/*.whl
     - cd tests
-    - python -m unittest discover
+    - python -m unittest discover    
 
 test-3.5-macos:
   stage:
@@ -118,20 +104,6 @@ test-3.5-macos:
     - virtualenv -p python3.5 .
     - source bin/activate
     - pip install dist3/*.whl
-    - cd tests
-    - python -m unittest discover
-
-test-2.7-linux:
-  stage:
-    test
-  tags:
-    - Linux
-  dependencies:
-    - build-2.7-linux
-  script:
-    - virtualenv -p python2.7 .
-    - source bin/activate
-    - pip install dist2/*.whl
     - cd tests
     - python -m unittest discover
 
@@ -162,20 +134,20 @@ deploy-3.7-VS2017:
   artifacts:
     paths:
       - release/*.whl
-
-deploy-3.7-linux:
+     
+deploy-3.9-linux:
   stage:
     deploy
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
   script:
     - mkdir release
     - cp dist3/*.whl release
   artifacts:
     paths:
-      - release/*.whl
+      - release/*.whl      
 
 deploy-3.5-macos:
   stage:
@@ -187,20 +159,6 @@ deploy-3.5-macos:
   script:
     - mkdir release
     - cp dist3/*.whl release
-  artifacts:
-    paths:
-      - release/*.whl
-
-deploy-2.7-linux:
-  stage:
-    deploy
-  tags:
-    - Linux
-  dependencies:
-    - build-2.7-linux
-  script:
-    - mkdir release
-    - cp dist2/*.whl release
   artifacts:
     paths:
       - release/*.whl
