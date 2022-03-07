@@ -225,7 +225,7 @@ void def_write_mesh(py::module& m) {
 		py::arg("face_color")=false,
 		py::arg("color_alpha")=false,
 		py::arg("color_float")=false,
-		py::arg("status")=false
+		py::arg("status")=false,
 		py::arg("texture_file")="",
 		py::arg("material_file_extension")=".mat"
 	);
