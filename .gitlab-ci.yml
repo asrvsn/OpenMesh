@@ -230,7 +230,7 @@ deploy-sdist:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - python setup.py sdist --dist-dir release
   artifacts:
@@ -243,9 +243,9 @@ deploy-documentation:
   tags:
     - Linux
   dependencies:
-    - build-3.7-linux
+    - build-3.9-linux
   script:
-    - virtualenv -p python3.7 .
+    - virtualenv -p python3.9 .
     - source bin/activate
     - pip install dist3/*.whl
     - pip install sphinx sphinx_rtd_theme
