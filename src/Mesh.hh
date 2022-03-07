@@ -854,6 +854,23 @@ void expose_mesh(py::module& m, const char *_name) {
 				}
 			})
 
+		.def("set_feature", [](Mesh& _self, OM::EdgeHandle _h, bool val) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				return _self.status(_h).set_feature(val);
+			})
+		.def("feature", [](Mesh& _self, OM::EdgeHandle _h) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				return _self.status(_h).feature();
+			})
+		.def("set_feature", [](Mesh& _self, OM::VertexHandle _h, bool val) {
+				if (!_self.has_vertex_status()) _self.request_vertex_status();
+				return _self.status(_h).set_feature(val);
+			})
+		.def("feature", [](Mesh& _self, OM::VertexHandle _h) {
+				if (!_self.has_vertex_status()) _self.request_vertex_status();
+				return _self.status(_h).feature();
+			})
+
 		//======================================================================
 		//  BaseKernel
 		//======================================================================
