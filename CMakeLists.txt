@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3.0)
 
 project(openmesh          
-        VERSION 1.2.0
+        VERSION 1.2.1
         LANGUAGES CXX )
 
 set(CMAKE_CXX_STANDARD 11)

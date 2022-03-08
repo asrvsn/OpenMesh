@@ -81,7 +81,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='openmesh',
-    version="1.2.0",
+    version="1.2.1",
     author='Alexander Dielen, Isaak Lim, Janis Born',
     author_email='vci-pypi@cs.rwth-aachen.de',
     description='a versatile halfedge-based data structure for representing and manipulating polygon meshes',
