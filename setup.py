@@ -29,8 +29,8 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
-            if cmake_version < '3.1.0':
-                raise RuntimeError("CMake >= 3.1.0 is required on Windows")
+            if cmake_version < '3.3.0':
+                raise RuntimeError("CMake >= 3.3.0 is required on Windows")
 
         for ext in self.extensions:
             self.build_extension(ext)
@@ -94,7 +94,7 @@ setup(
     install_requires=['numpy'],
     options={'build': {'build_base': 'build-setuptools'}},
     license='BSD 3-Clause',
-    url='https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python',
+    url='https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 3.9',
