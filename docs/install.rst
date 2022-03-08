@@ -14,17 +14,16 @@ We provide prebuilt wheels for manual installation with `pip` for the following 
 
 Linux
 ^^^^^
-* `Python 2.7 <https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-2.7-linux>`_
-* `Python 3.5 <https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.5-linux>`_
+* `Python 3.9 <https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.9-linux>`_
 
-macOS 10.13
+macOS
 ^^^^^^^^^^^
-* `Python 2.7 <https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-2.7-macos>`_
-* `Python 3.5 <https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.5-macos>`_
+* `Python 3.9 X86 <https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.9-macos>`_
+* `Python 3.9 ARM64 (M1) <https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.9-macos-m1>`_
 
 Windows
 ^^^^^^^
-* `Python 3.6 <https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.6-VS2017>`_
+* `Python 3.9 <https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/master/browse/release?job=deploy-3.9-VS2017>`_
 
 Building from source
 ^^^^^^^^^^^^^^^^^^^^
