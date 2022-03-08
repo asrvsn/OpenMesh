@@ -81,7 +81,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='openmesh',
-    version="1.1.6",
+    version="1.2.0",
     author='Alexander Dielen, Isaak Lim, Janis Born',
     author_email='vci-pypi@cs.rwth-aachen.de',
     description='a versatile halfedge-based data structure for representing and manipulating polygon meshes',
@@ -97,14 +97,11 @@ setup(
     url='https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python',
     classifiers=[
         'Development Status :: 4 - Beta',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.9',
         'Topic :: Multimedia :: Graphics',
     ],
     project_urls={
-        'Source':'https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python',
-        'Tracker':'https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/issues',
+        'Source':'https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python',
+        'Tracker':'https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/issues',
     }
 )

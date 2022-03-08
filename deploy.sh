@@ -7,9 +7,9 @@
 
 revision=${1:-master}
 
-for name in "deploy-sdist" "deploy-2.7-macos" "deploy-3.5-macos" "deploy-2.7-linux" "deploy-3.5-linux" "deploy-3.7-VS2017"
+for name in "deploy-sdist" "deploy-3.9-macos-m1" "deploy-3.9-macos" "deploy-3.9-linux" "deploy-3.9-VS2017"
 do
-  wget "https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/$revision/download?job=$name" -O "$name.zip"
+  wget "https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/-/jobs/artifacts/$revision/download?job=$name" -O "$name.zip"
   unzip "$name.zip"
   rm -f "$name.zip"
 done
