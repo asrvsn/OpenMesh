@@ -1,6 +1,6 @@
 # OpenMesh Python Bindings (1.2.0)
 
-[![](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/badges/master/pipeline.svg)](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/commits/master)
+[![](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/badges/master/pipeline.svg)](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/commits/master)
 
 OpenMesh is a versatile halfedge-based data structure for representing and manipulating polygon meshes.
 The OpenMesh Python bindings are are tightly integrated with [numpy](http://www.numpy.org/) and are implemented using [pybind11](https://github.com/pybind/pybind11). 
