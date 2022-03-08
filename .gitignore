@@ -4,6 +4,7 @@ tests/OutFiles
 *.pyc
 *.so
 *.whl
+*.gz
 
 .eggs/
 build-setuptools/
