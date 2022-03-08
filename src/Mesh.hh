@@ -719,10 +719,21 @@ void expose_mesh(py::module& m, const char *_name) {
 				_self.status(_h).set_deleted(_val);
 			})
 
-		.def("is_deleted", [](Mesh& _self, OM::HalfedgeHandle _h) {
-				if (!_self.has_halfedge_status()) return false;
-				return _self.status(_h).deleted();
-			})
+        .def("is_locked", [](Mesh& _self, OM::VertexHandle _h) {
+            if (!_self.has_vertex_status()) return false;
+            return _self.status(_h).locked();
+        })
+
+        .def("set_locked", [](Mesh& _self, OM::VertexHandle _h, bool _val) {
+            if (!_self.has_vertex_status()) _self.request_vertex_status();
+            _self.status(_h).set_locked(_val);
+
+        })
+
+        .def("is_deleted", [](Mesh& _self, OM::HalfedgeHandle _h) {
+            if (!_self.has_halfedge_status()) return false;
+            return _self.status(_h).deleted();
+        })
 
 		.def("set_deleted", [](Mesh& _self, OM::HalfedgeHandle _h, bool _val) {
 				if (!_self.has_halfedge_status()) _self.request_halfedge_status();
@@ -843,6 +854,23 @@ void expose_mesh(py::module& m, const char *_name) {
 				}
 			})
 
+		.def("set_feature", [](Mesh& _self, OM::EdgeHandle _h, bool val) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				return _self.status(_h).set_feature(val);
+			})
+		.def("feature", [](Mesh& _self, OM::EdgeHandle _h) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				return _self.status(_h).feature();
+			})
+		.def("set_feature", [](Mesh& _self, OM::VertexHandle _h, bool val) {
+				if (!_self.has_vertex_status()) _self.request_vertex_status();
+				return _self.status(_h).set_feature(val);
+			})
+		.def("feature", [](Mesh& _self, OM::VertexHandle _h) {
+				if (!_self.has_vertex_status()) _self.request_vertex_status();
+				return _self.status(_h).feature();
+			})
+
 		//======================================================================
 		//  BaseKernel
 		//======================================================================
@@ -893,13 +921,21 @@ void expose_mesh(py::module& m, const char *_name) {
 		.def("valence", valence_fh)
 		.def("is_simple_link", &Mesh::is_simple_link)
 		.def("is_simply_connected", &Mesh::is_simply_connected)
-		.def("remove_edge", &Mesh::remove_edge)
-		.def("reinsert_edge", &Mesh::reinsert_edge)
 		.def("triangulate", triangulate_fh)
 		.def("triangulate", triangulate_void)
 		.def("split_edge", &Mesh::split_edge)
 		.def("split_edge_copy", &Mesh::split_edge_copy)
 
+		.def("remove_edge", [](Mesh& _self, OM::EdgeHandle _eh) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				if (!_self.has_face_status()) _self.request_face_status();
+				return _self.remove_edge(_eh);
+			})
+		.def("reinsert_edge", [](Mesh& _self, OM::EdgeHandle _eh) {
+				if (!_self.has_edge_status()) _self.request_edge_status();
+				if (!_self.has_face_status()) _self.request_face_status();
+				_self.reinsert_edge(_eh);
+			})
 		.def("is_collapse_ok", [](Mesh& _self, OM::HalfedgeHandle _heh) {
 				if (!_self.has_vertex_status()) _self.request_vertex_status();
 				if (!_self.has_halfedge_status()) _self.request_halfedge_status();

@@ -16,8 +16,8 @@ if (NOT WIN32)
 	)
 endif ()
 
-acg_append_files(HEADERS "src/*.hh" .)
-acg_append_files(SOURCES "src/*.cc" .)
+vci_append_files(HEADERS "src/*.hh" .)
+vci_append_files(SOURCES "src/*.cc" .)
 
 include_directories(${OPENMESH_INCLUDE_DIRS})
 pybind11_add_module(openmesh ${HEADERS} ${SOURCES})

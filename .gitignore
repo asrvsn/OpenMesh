@@ -2,6 +2,7 @@ build/
 tests/__pycache__
 tests/OutFiles
 *.pyc
+*.so
 
 .eggs/
 build-setuptools/
