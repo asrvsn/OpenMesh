@@ -1,6 +1,6 @@
-# OpenMesh Python Bindings (1.1.6)
+# OpenMesh Python Bindings (1.2.1)
 
-[![](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/badges/master/pipeline.svg)](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/commits/master)
+[![](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/badges/master/pipeline.svg)](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/commits/master)
 
 OpenMesh is a versatile halfedge-based data structure for representing and manipulating polygon meshes.
 The OpenMesh Python bindings are are tightly integrated with [numpy](http://www.numpy.org/) and are implemented using [pybind11](https://github.com/pybind/pybind11). 
@@ -49,7 +49,7 @@ point_array += np.array([1, 0, 0])
 om.write_mesh('test.off', mesh)
 mesh_2 = om.read_trimesh('test.off')
 ```
-For further examples see the documentation or refer to the [unit tests](https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python/tree/master/tests).
+For further examples see the documentation or refer to the [unit tests](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/openmesh-python/tree/master/tests).
 
 ## Installation
 

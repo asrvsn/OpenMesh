@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.3.0)
 
-project(openmesh)
+project(openmesh          
+        VERSION 1.2.1
+        LANGUAGES CXX )
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -16,10 +18,23 @@ if (NOT WIN32)
 	)
 endif ()
 
-vci_append_files(HEADERS "src/*.hh" .)
-vci_append_files(SOURCES "src/*.cc" .)
+set( HEADERS
+src/Circulator.hh
+src/Decimater.hh
+src/InputOutput.hh
+src/Iterator.hh
+src/Mesh.hh
+src/MeshTypes.hh
+src/Miscellaneous.hh
+src/Utilities.hh
+)
 
-include_directories(${OPENMESH_INCLUDE_DIRS})
+set( SOURCES
+src/Bindings.cc
+src/InputOutput.cc
+src/Miscellaneous.cc
+)
+
 pybind11_add_module(openmesh ${HEADERS} ${SOURCES})
 
 if (WIN32)
