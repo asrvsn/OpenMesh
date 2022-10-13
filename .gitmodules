@@ -3,5 +3,5 @@
 	url = https://github.com/pybind/pybind11.git
 [submodule "OpenMesh"]
 	path = OpenMesh
-	url =../OpenMesh/OpenMesh.git
+	url = ../../OpenMesh/OpenMesh.git
 	branch = master
