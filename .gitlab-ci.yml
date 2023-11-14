@@ -20,7 +20,7 @@ build-3.9-VS2017:
     paths:
       - dist3/
       
-build-3.9-linux:
+build-3.11-linux:
   stage:
     build
   tags:
@@ -28,7 +28,7 @@ build-3.9-linux:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - virtualenv -p python3.9 .
+    - virtualenv -p python3.11 .
     - source bin/activate
     - python setup.py bdist_wheel --dist-dir dist3
   artifacts:
@@ -79,16 +79,16 @@ test-3.9-VS2017:
   script: "CI\\test-3.9-VS2017.bat"
 
     
-test-3.9-linux:
+test-3.11-linux:
   stage:
     test
   tags:
     - Linux
   dependencies:
-    - build-3.9-linux
-  needs: [build-3.9-linux]
+    - build-3.11-linux
+  needs: [build-3.11-linux]
   script:
-    - virtualenv -p python3.9 .
+    - virtualenv -p python3.11 .
     - source bin/activate
     - pip install dist3/*.whl
     - cd tests
@@ -140,14 +140,14 @@ deploy-3.9-VS2017:
     paths:
       - release/*.whl
      
-deploy-3.9-linux:
+deploy-3.11-linux:
   stage:
     deploy
   tags:
     - Linux
   dependencies:
-    - build-3.9-linux
-  needs: [build-3.9-linux]
+    - build-3.11-linux
+  needs: [build-3.11-linux]
   script:
     - mkdir release
     - cp dist3/*.whl release
@@ -206,10 +206,10 @@ deploy-documentation:
   tags:
     - Linux
   dependencies:
-    - build-3.9-linux
-  needs: [build-3.9-linux]
+    - build-3.11-linux
+  needs: [build-3.11-linux]
   script:
-    - virtualenv -p python3.9 .
+    - virtualenv -p python3.11 .
     - source bin/activate
     - pip install dist3/*.whl
     - pip install sphinx sphinx_rtd_theme
