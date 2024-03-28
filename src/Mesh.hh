@@ -6,6 +6,10 @@
 #include "Iterator.hh"
 #include "Circulator.hh"
 
+#include <OpenMesh/Tools/Subdivider/Uniform/ModifiedButterflyT.hh>
+#include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
+#include <OpenMesh/Tools/Subdivider/Uniform/LoopT.hh>
+
 #include <algorithm>
 
 #include <pybind11/pybind11.h>
@@ -14,7 +18,6 @@
 
 namespace py = pybind11;
 namespace OM = OpenMesh;
-
 
 /**
  * Thin wrapper for assign_connectivity.
@@ -492,6 +495,33 @@ void expose_type_specific_functions(py::class_<TriMesh>& _class) {
 
 		.def("face_vertex_indices", &face_vertex_indices_trimesh)
 		.def("fv_indices", &face_vertex_indices_trimesh)
+		.def("subdivide_modified_butterfly", [](TriMesh& _self, int _n = 1) {
+			/** 
+			 * Modified Butterfly interpolation
+			*/
+				OM::Subdivider::Uniform::ModifiedButterflyT<TriMesh> subdivider;
+				subdivider.attach(_self);
+				subdivider(_n);
+				subdivider.detach();
+			})
+		.def("subdivide_catmull_clark", [](TriMesh& _self, int _n = 1) {
+			/** 
+			 * Catmull-Clark approximation
+			*/
+				OM::Subdivider::Uniform::CatmullClarkT<TriMesh> subdivider;
+				subdivider.attach(_self);
+				subdivider(_n);
+				subdivider.detach();
+			})
+		.def("subdivide_loop", [](TriMesh& _self, int _n = 1) {
+			/** 
+			 * Loop approximation
+			*/
+				OM::Subdivider::Uniform::LoopT<TriMesh> subdivider;
+				subdivider.attach(_self);
+				subdivider(_n);
+				subdivider.detach();
+			})
 		;
 }
 
